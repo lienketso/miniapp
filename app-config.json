@@ -10,7 +10,8 @@
     "hideAndroidBottomNavigationBar": false,
     "hideIOSSafeAreaBottom": false,
     "actionBarHidden": true,
-    "textAlign": "left"
+    "textAlign": "left",
+    "host":"https://ezlife.vn"
   },
   "debug": false,
   "listCSS": [],

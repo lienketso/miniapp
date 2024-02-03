@@ -6,6 +6,7 @@ import { Banner } from "./banner";
 import { Categories } from "./categories";
 import { Recommend } from "./recommend";
 import { ProductList } from "./product-list";
+import { HotProductList } from "./hot-categories";
 import { Divider } from "components/divider";
 
 const HomePage: React.FunctionComponent = () => {
@@ -21,7 +22,8 @@ const HomePage: React.FunctionComponent = () => {
         <Divider />
         <Recommend />
         <Divider />
-        <ProductList />
+        {/* <ProductList /> */}
+        <HotProductList/>
         <Divider />
       </Box>
     </Page>

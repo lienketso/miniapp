@@ -50,6 +50,7 @@ export function getDummyImage(filename: string) {
   return `https://zalo-miniapp.github.io/zaui-coffee/dummy/${filename}`;
 }
 
+
 export function isIdentical(
   option1: SelectedOptions,
   option2: SelectedOptions,

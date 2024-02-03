@@ -25,25 +25,26 @@ export const RecommendContent: FC = () => {
                     className="relative aspect-video rounded-lg bg-cover bg-center bg-skeleton"
                     style={{ backgroundImage: `url(${product.image})` }}
                   >
-                    {product.sale && (
+                    {product.price && (
                       <Text
                         size="xxxxSmall"
                         className="absolute right-2 top-2 uppercase bg-green text-white h-4 px-[6px] rounded-full"
                       >
-                        Giảm{" "}
-                        {product.sale.type === "percent" ? (
-                          `${product.sale.percent * 100}%`
+                        <DisplayPrice>{product.price}</DisplayPrice>
+                        {/* Giảm{" "}
+                        {product.price === "percent" ? (
+                          `${product.price * 100}%`
                         ) : (
-                          <DisplayPrice>{product.sale.amount}</DisplayPrice>
-                        )}
+                          <DisplayPrice>{product.price}</DisplayPrice>
+                        )} */}
                       </Text>
                     )}
                   </Box>
                   <Box className="space-y-1">
                     <Text size="small">{product.name}</Text>
-                    <Text size="xxSmall" className="line-through text-gray">
+                    {/* <Text size="xxSmall" className="line-through text-gray">
                       <DisplayPrice>{product.price}</DisplayPrice>
-                    </Text>
+                    </Text> */}
                     <Text size="large" className="font-medium text-primary">
                       <FinalPrice>{product}</FinalPrice>
                     </Text>

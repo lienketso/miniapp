@@ -9,61 +9,78 @@ import breadIcon from "static/category-bread.svg";
 import juiceIcon from "static/category-juice.svg";
 import logo from "static/logo.png";
 import { Category, CategoryId } from "types/category";
-import { Product, Variant } from "types/product";
+import { Product, Variant,HotCategory } from "types/product";
+import { DetailProduct } from "types/detail-product";
 import { Cart } from "types/cart";
 import { Notification } from "types/notification";
 import { calculateDistance } from "utils/location";
 import { Store } from "types/delivery";
 import { calcFinalPrice, getDummyImage } from "utils/product";
+import { getConfig } from "../src/utils/config";
 import { wait } from "utils/async";
 
 export const userState = selector({
   key: "user",
   get: () => getUserInfo({}).then((res) => res.userInfo),
 });
-
+//Danh sách category nổi bật 
 export const categoriesState = selector<Category[]>({
   key: "categories",
   get: async () => {
     await wait(2000);
-    const response = await  fetch('https://ezlife.vn/api/get-feature-category');
+    const host =getConfig((config) => config.app.host);
+    const response = await  fetch(host+'/api/get-feature-category');
     const data = await response.json();
     return data
   }
   
 });
 
-const description = `There is a set of mock banners available <u>here</u> in three colours and in a range of standard banner sizes`;
-
+//Sản phẩm bán chạy
 export const productsState = selector<Product[]>({
   key: "products",
   get: async () => {
     await wait(2000);
-    const response = await  fetch('https://ezlife.vn/api/get-feature-product');
+    const host =getConfig((config) => config.app.host);
+    const response = await  fetch(host+'/api/get-feature-product');
     const data = await response.json();
     return data
     ;
   },
 });
 
-export const recommendProductsState = selector<Product[]>({
-  key: "recommendProducts",
-  get: ({ get }) => {
-    const products = get(productsState);
-    return products.filter((p) => p.sale_price);
+//Sản phẩm nổi bật
+export const hotCategoryState = selector<HotCategory[]>({
+  key: "hotItems",
+  get: async () => {
+    await wait(2000);
+    const host =getConfig((config) => config.app.host);
+    const response = await  fetch(host+'/api/get-hot-category');
+    const data = await response.json();
+    return data
+    ;
   },
 });
 
-export const selectedCategoryIdState = atom({
-  key: "selectedCategoryId",
-  default: 92,
+//Hiển thị sản phẩm chi tiết
+export const detailProductState = selector<DetailProduct>({
+  key: "detailProduct",
+  get: async () => {   
+    const host =getConfig((config) => config.app.host);
+    const response = await  fetch(host+'/api/get-detail-product'+selectedProductIdState);
+    const data = await response.json();
+    return data
+    ;
+  },
 });
+
 
 export const productsByCategoryState = selector<CategoryId>({
   key: "productsByCategory",
   get: async () => {
     await wait(2000);
-    const response = await  fetch('https://ezlife.vn/api/get-feature-category');
+    const host =getConfig((config) => config.app.host);
+    const response = await  fetch(host+'/api/get-feature-category'+ selectedProductIdState);
     const data = await response.json();
     return data
   }
@@ -74,10 +91,29 @@ export const categoryInforState = selector({
   "key":"categoryInfor",
   get: async() => {
     await wait(2000);
-    const response = await  fetch('https://ezlife.vn/api/get-infor-category');
+    const host =getConfig((config) => config.app.host);
+    const response = await  fetch(host+'/api/get-infor-category');
     const data = await response.json();
     return data
   }
+});
+
+export const recommendProductsState = selector<Product[]>({
+  key: "recommendProducts",
+  get: ({ get }) => {
+    const products = get(productsState);
+    return products.filter((p) => p.price);
+  },
+});
+
+export const selectedCategoryIdState = atom({
+  key: "selectedCategoryId",
+  default: 92,
+});
+
+export const selectedProductIdState = atom({
+  key: "selectedProductId",
+  default: 0,
 });
 
 export const cartState = atom<Cart>({
@@ -110,17 +146,17 @@ export const notificationsState = atom<Notification[]>({
   default: [
     {
       id: 1,
-      image: logo,
-      title: "Chào bạn mới",
+      image: "https://ezlife.vn/storage/banner/logo-ezlife.png",
+      title: "Chào bạn đến với siêu thị EZlife",
       content:
-        "Cảm ơn đã sử dụng ZaUI Coffee, bạn có thể dùng ứng dụng này để tiết kiệm thời gian xây dựng",
+        "Cảm ơn đã lựa chọn siêu thị EZlife để mua sắm",
     },
-    {
-      id: 2,
-      image: logo,
-      title: "Giảm 50% lần đầu mua hàng",
-      content: "Nhập WELCOME để được giảm 50% giá trị đơn hàng đầu tiên order",
-    },
+    // {
+    //   id: 2,
+    //   image: logo,
+    //   title: "Giảm 50% lần đầu mua hàng",
+    //   content: "Nhập WELCOME để được giảm 50% giá trị đơn hàng đầu tiên order",
+    // },
   ],
 });
 
@@ -133,6 +169,7 @@ export const resultState = selector<Product[]>({
   key: "result",
   get: async ({ get }) => {
     const keyword = get(keywordState);
+    console.log(keyword);
     if (!keyword.trim()) {
       return [];
     }
@@ -149,42 +186,11 @@ export const storesState = atom<Store[]>({
   default: [
     {
       id: 1,
-      name: "VNG Campus Store",
+      name: "EZlife",
       address:
-        "Khu chế xuất Tân Thuận, Z06, Số 13, Tân Thuận Đông, Quận 7, Thành phố Hồ Chí Minh, Việt Nam",
+        "Số 23, ngõ 121/39 TDP Đình, Đại Mỗ, Nam Từ Liêm, Hà Nội",
       lat: 10.741639,
       long: 106.714632,
-    },
-    {
-      id: 2,
-      name: "The Independence Palace",
-      address:
-        "135 Nam Kỳ Khởi Nghĩa, Bến Thành, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.779159,
-      long: 106.695271,
-    },
-    {
-      id: 3,
-      name: "Saigon Notre-Dame Cathedral Basilica",
-      address:
-        "1 Công xã Paris, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.779738,
-      long: 106.699092,
-    },
-    {
-      id: 4,
-      name: "Bình Quới Tourist Village",
-      address:
-        "1147 Bình Quới, phường 28, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 10.831098,
-      long: 106.733128,
-    },
-    {
-      id: 5,
-      name: "Củ Chi Tunnels",
-      address: "Phú Hiệp, Củ Chi, Thành phố Hồ Chí Minh, Việt Nam",
-      lat: 11.051655,
-      long: 106.494249,
     },
   ],
 });

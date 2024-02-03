@@ -48,3 +48,9 @@ export interface Product {
   sale_price?: Sale;
   variants?: Variant[];
 }
+export interface HotCategory{
+  id: number;
+  name: string;
+  image: string;
+  products:Product[]
+}

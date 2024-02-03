@@ -1,0 +1,35 @@
+export interface DetailProduct {
+  id: number;
+  name: string;
+  description: string;
+  content: string;
+  status: string;
+  sku: string;
+  order: number;
+  quantity: number;
+  allow_checkout_when_out_of_stock: number;
+  with_storehouse_management: number;
+  is_featured: number;
+  category_id?: number;
+  brand_id: number;
+  is_variation: number;
+  is_searchable: number;
+  is_show_on_list: number;
+  sale_type: number;
+  price: number;
+  sale_price?: number;
+  start_date?: string;
+  end_date?: string;
+  length: number;
+  wide: number;
+  height: number;
+  weight: number;
+  barcode?: string;
+  tax_id: number;
+  stock_status: string;
+  store_id: number;
+  image: string;
+  commission: number;
+  original_price: number;
+  front_sale_price: number;
+}
