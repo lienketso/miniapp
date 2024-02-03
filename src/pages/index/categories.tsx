@@ -10,7 +10,7 @@ export const Categories: FC = () => {
   const navigate = useNavigate();
   const setSelectedCategoryId = useSetRecoilState(selectedCategoryIdState);
 
-  const gotoCategory = (categoryId: number) => {
+  const gotoCategory = (categoryId: any) => {
     setSelectedCategoryId(categoryId);
     navigate("/category");
   };

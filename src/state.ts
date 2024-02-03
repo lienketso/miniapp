@@ -80,6 +80,7 @@ export const productsByCategoryState = selectorFamily<Product[], CategoryId>({
   get:
     (categoryId) =>
     async () => {
+      await wait(100);
       const host =getConfig((config) => config.app.host);
       const response =  await  fetch(host+'/api/get-infor-category?id='+ categoryId);
       const data = await response.json();     

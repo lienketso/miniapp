@@ -18,10 +18,13 @@ export const ProductItem: FC<{ product: Product }> = ({ product }) => {
           </Box>
           <Text>{product.name}</Text>
           <Text size="xxSmall" className="text-gray pb-2">
-            {product.price} đ
+            {numberWithCommas(product.price)} đ
           </Text>
         </div>
       )}
     </ProductPicker>
   );
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 };
