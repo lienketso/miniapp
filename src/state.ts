@@ -74,16 +74,17 @@ export const detailProductState = selector<DetailProduct>({
   },
 });
 
-
-export const productsByCategoryState = selector<CategoryId>({
+//Danh sách sản phẩm theo category 
+export const productsByCategoryState = selectorFamily<Product[], CategoryId>({
   key: "productsByCategory",
-  get: async () => {
-    await wait(2000);
-    const host =getConfig((config) => config.app.host);
-    const response = await  fetch(host+'/api/get-feature-category'+ selectedProductIdState);
-    const data = await response.json();
-    return data
-  }
+  get:
+    (categoryId) =>
+    async () => {
+      const host =getConfig((config) => config.app.host);
+      const response =  await  fetch(host+'/api/get-infor-category?id='+ categoryId);
+      const data = await response.json();     
+      return data.productItems.data;
+    },
 });
 
 //thong tin danh muc san pham
@@ -108,7 +109,7 @@ export const recommendProductsState = selector<Product[]>({
 
 export const selectedCategoryIdState = atom({
   key: "selectedCategoryId",
-  default: 92,
+  default: "92",
 });
 
 export const selectedProductIdState = atom({
