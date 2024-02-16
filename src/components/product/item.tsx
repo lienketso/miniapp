@@ -6,6 +6,7 @@ import { ProductPicker } from "./picker";
 
 export const ProductItem: FC<{ product: Product }> = ({ product }) => {
   return (
+
     <ProductPicker product={product}>
       {({ open }) => (
         <div className="space-y-2" onClick={open}>

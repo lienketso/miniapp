@@ -10,11 +10,13 @@ export const HotCategoryContent: FC = () => {
   const HotCate = useRecoilValue(hotCategoryState);
   return (
     <>
-      {HotCate.map((category, index) => {
+      {HotCate.map((category) => {
+        console.log(category)
         return (
-          <Section title={category.name} id="{category.id}">
+          <Section title={category.name} id={""+category.id+""}>
             <Box className="grid grid-cols-2 gap-4">
               {category.products.map((product) => (
+                
                 <ProductItem key={product.id} product={product} />
               ))}
             </Box>
