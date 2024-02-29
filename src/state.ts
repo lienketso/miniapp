@@ -1,5 +1,6 @@
 import { atom, selector, selectorFamily } from "recoil";
 import { getLocation, getPhoneNumber, getUserInfo } from "zmp-sdk";
+import { getAccessToken } from "zmp-sdk/apis";
 import coffeeIcon from "static/category-coffee.svg";
 import matchaIcon from "static/category-matcha.svg";
 import foodIcon from "static/category-food.svg";
@@ -9,7 +10,7 @@ import breadIcon from "static/category-bread.svg";
 import juiceIcon from "static/category-juice.svg";
 import logo from "static/logo.png";
 import { Category, CategoryId } from "types/category";
-import { Product, Variant,HotCategory } from "types/product";
+import { Product, Variant, HotCategory } from "types/product";
 import { DetailProduct } from "types/detail-product";
 import { Cart } from "types/cart";
 import { Notification } from "types/notification";
@@ -23,17 +24,16 @@ export const userState = selector({
   key: "user",
   get: () => getUserInfo({}).then((res) => res.userInfo),
 });
-//Danh sách category nổi bật 
+//Danh sách category nổi bật
 export const categoriesState = selector<Category[]>({
   key: "categories",
   get: async () => {
     await wait(2000);
-    const host =getConfig((config) => config.app.host);
-    const response = await  fetch(host+'/api/get-feature-category');
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(host + "/api/get-feature-category");
     const data = await response.json();
-    return data
-  }
-  
+    return data;
+  },
 });
 
 //Sản phẩm bán chạy
@@ -41,11 +41,10 @@ export const productsState = selector<Product[]>({
   key: "products",
   get: async () => {
     await wait(2000);
-    const host =getConfig((config) => config.app.host);
-    const response = await  fetch(host+'/api/get-feature-product');
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(host + "/api/get-feature-product");
     const data = await response.json();
-    return data
-    ;
+    return data;
   },
 });
 
@@ -54,50 +53,51 @@ export const hotCategoryState = selector<HotCategory[]>({
   key: "hotItems",
   get: async () => {
     await wait(2000);
-    const host =getConfig((config) => config.app.host);
-    const response = await  fetch(host+'/api/get-hot-category');
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(host + "/api/get-hot-category");
     const data = await response.json();
-    return data
-    ;
+    console.log(data);
+    return data;
   },
 });
 
 //Hiển thị sản phẩm chi tiết
 export const detailProductState = selector<DetailProduct>({
   key: "detailProduct",
-  get: async () => {   
-    const host =getConfig((config) => config.app.host);
-    const response = await  fetch(host+'/api/get-detail-product'+selectedProductIdState);
+  get: async () => {
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(
+      host + "/api/get-detail-product" + selectedProductIdState
+    );
     const data = await response.json();
-    return data
-    ;
+    return data;
   },
 });
 
-//Danh sách sản phẩm theo category 
+//Danh sách sản phẩm theo category
 export const productsByCategoryState = selectorFamily<Product[], CategoryId>({
   key: "productsByCategory",
-  get:
-    (categoryId) =>
-    async () => {
-      await wait(100);
-      const host =getConfig((config) => config.app.host);
-      const response =  await  fetch(host+'/api/get-infor-category?id='+ categoryId);
-      const data = await response.json();     
-      return data.productItems.data;
-    },
+  get: (categoryId) => async () => {
+    await wait(100);
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(
+      host + "/api/get-infor-category?id=" + categoryId
+    );
+    const data = await response.json();
+    return data.productItems.data;
+  },
 });
 
 //thong tin danh muc san pham
 export const categoryInforState = selector({
-  "key":"categoryInfor",
-  get: async() => {
+  key: "categoryInfor",
+  get: async () => {
     await wait(2000);
-    const host =getConfig((config) => config.app.host);
-    const response = await  fetch(host+'/api/get-infor-category');
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(host + "/api/get-infor-category");
     const data = await response.json();
-    return data
-  }
+    return data;
+  },
 });
 
 export const recommendProductsState = selector<Product[]>({
@@ -136,9 +136,8 @@ export const totalPriceState = selector({
   get: ({ get }) => {
     const cart = get(cartState);
     return cart.reduce(
-      (total, item) =>
-        total + item.quantity * calcFinalPrice(item.product),
-      0,
+      (total, item) => total + item.quantity * calcFinalPrice(item.product),
+      0
     );
   },
 });
@@ -150,8 +149,7 @@ export const notificationsState = atom<Notification[]>({
       id: 1,
       image: "https://ezlife.vn/storage/banner/logo-ezlife.png",
       title: "Chào bạn đến với siêu thị EZlife",
-      content:
-        "Cảm ơn đã lựa chọn siêu thị EZlife để mua sắm",
+      content: "Cảm ơn đã lựa chọn siêu thị EZlife để mua sắm",
     },
     // {
     //   id: 2,
@@ -175,11 +173,15 @@ export const resultState = selector<Product[]>({
     if (!keyword.trim()) {
       return [];
     }
-    const products = get(productsState);
+    // const products = get(productsState);
     await wait(500);
-    return products.filter((product) =>
-      product.name.trim().toLowerCase().includes(keyword.trim().toLowerCase()),
-    );
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(host + "/api/get-product-by-name?name=" +keyword );
+    const data = await response.json();
+    return data;
+    // return products.filter((product) =>
+    //   product.name.trim().toLowerCase().includes(keyword.trim().toLowerCase()),
+    // );
   },
 });
 
@@ -189,8 +191,7 @@ export const storesState = atom<Store[]>({
     {
       id: 1,
       name: "EZlife",
-      address:
-        "Số 23, ngõ 121/39 TDP Đình, Đại Mỗ, Nam Từ Liêm, Hà Nội",
+      address: "Số 23, ngõ 121/39 TDP Đình, Đại Mỗ, Nam Từ Liêm, Hà Nội",
       lat: 10.741639,
       long: 106.714632,
     },
@@ -214,13 +215,13 @@ export const nearbyStoresState = selector({
           location.latitude,
           location.longitude,
           store.lat,
-          store.long,
+          store.long
         ),
       }));
 
       // Sort the stores by distance from the current location
       const nearbyStores = storesWithDistance.sort(
-        (a, b) => a.distance - b.distance,
+        (a, b) => a.distance - b.distance
       );
 
       return nearbyStores;
@@ -274,11 +275,11 @@ export const locationState = selector<
       if (token) {
         console.warn(
           "Sử dụng token này để truy xuất vị trí chính xác của người dùng",
-          token,
+          token
         );
         console.warn(
           "Chi tiết tham khảo: ",
-          "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app",
+          "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app"
         );
         console.warn("Giả lập vị trí mặc định: VNG Campus");
         return {
@@ -298,19 +299,32 @@ export const phoneState = selector<string | boolean>({
     if (requested) {
       const { number, token } = await getPhoneNumber({ fail: console.warn });
       if (number) {
+        console.log("SDT "+ number)
         return number;
       }
       console.warn(
-        "Sử dụng token này để truy xuất số điện thoại của người dùng",
-        token,
+        token
       );
+      console.warn("Đây là acceptToken",getAccessToken);
       console.warn(
         "Chi tiết tham khảo: ",
-        "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app",
+        "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app"
       );
       console.warn("Giả lập số điện thoại mặc định: 0337076898");
       return "0337076898";
     }
     return false;
   },
+});
+
+getAccessToken({
+  success: (accessToken) => {
+    console.log(accessToken);
+    // xử lý khi gọi api thành công
+    return accessToken;
+  },
+  fail: (error) => {
+    // xử lý khi gọi api thất bại
+    console.log(error);
+  }
 });
