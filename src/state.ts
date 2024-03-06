@@ -176,7 +176,9 @@ export const resultState = selector<Product[]>({
     // const products = get(productsState);
     await wait(500);
     const host = getConfig((config) => config.app.host);
-    const response = await fetch(host + "/api/get-product-by-name?name=" +keyword );
+    const response = await fetch(
+      host + "/api/get-product-by-name?name=" + keyword
+    );
     const data = await response.json();
     return data;
     // return products.filter((product) =>
@@ -295,22 +297,20 @@ export const locationState = selector<
 export const phoneState = selector<string | boolean>({
   key: "phone",
   get: async ({ get }) => {
+
     const requested = get(requestPhoneTriesState);
     if (requested) {
       const { number, token } = await getPhoneNumber({ fail: console.warn });
       if (number) {
-        console.log("SDT "+ number)
         return number;
       }
-      console.warn(
-        token
-      );
-      console.warn("Đây là acceptToken",getAccessToken);
-      console.warn(
-        "Chi tiết tham khảo: ",
-        "https://mini.zalo.me/blog/thong-bao-thay-doi-luong-truy-xuat-thong-tin-nguoi-dung-tren-zalo-mini-app"
-      );
-      console.warn("Giả lập số điện thoại mặc định: 0337076898");
+      if(token){
+        const accessToken = await getAccessToken({});
+        const tokenPhone = await getPhoneNumberByToken(token, accessToken);
+        console.log("tokenPhone", tokenPhone.data.number);
+        return tokenPhone.data.number;
+      }
+
       return "0337076898";
     }
     return false;
@@ -319,12 +319,28 @@ export const phoneState = selector<string | boolean>({
 
 getAccessToken({
   success: (accessToken) => {
-    console.log(accessToken);
     // xử lý khi gọi api thành công
     return accessToken;
   },
   fail: (error) => {
     // xử lý khi gọi api thất bại
     console.log(error);
-  }
+  },
 });
+async function getPhoneNumberByToken(token:string, accessToken:string) {
+  console.log(token,accessToken)
+  try {
+    const response = await fetch("https://graph.zalo.me/v2.0/me/info", {
+      method: "GET",
+      headers: {
+        access_token: accessToken,
+        code: token,
+        secret_key: "DoC5XYyq5Y0OdJHxuM2G",
+      },
+    });
+    return  response.json();
+
+  } catch (error) {
+    console.error(error);
+  }
+}

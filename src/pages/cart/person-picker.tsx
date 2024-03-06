@@ -20,7 +20,7 @@ export const RequestPersonPickerPhone: FC = () => {
     <ListItem
       onClick={() => retry((r) => r + 1)}
       title="Chọn người nhận"
-      subtitle="Yêu cầu truy cập số điện thoại"
+      subtitle="Vui lòng cấp quyền truy cập số điện thoại của bạn"
     />
   );
 };

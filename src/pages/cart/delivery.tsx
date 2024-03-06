@@ -9,35 +9,35 @@ import { TimePicker } from "./time-picker";
 export const Delivery: FC = () => {
   return (
     <Box className="space-y-3 px-4">
-      <Text.Header>Hình thức nhận hàng</Text.Header>
+      <Text.Header>Thông tin người nhận</Text.Header>
       <ListRenderer
         items={[
-          {
-            left: <Icon icon="zi-location" className="my-auto" />,
-            right: (
-              <Suspense fallback={<RequestStorePickerLocation />}>
-                <StorePicker />
-              </Suspense>
-            ),
-          },
-          {
-            left: <Icon icon="zi-clock-1" className="my-auto" />,
-            right: (
-              <Box flex className="space-x-2">
-                <Box className="flex-1 space-y-[2px]">
-                  <TimePicker />
-                  <Text size="xSmall" className="text-gray">
-                    Thời gian nhận hàng
-                  </Text>
-                </Box>
-                <Icon icon="zi-chevron-right" />
-              </Box>
-            ),
-          },
+          // {
+          //   left: <Icon icon="zi-location" className="my-auto" />,
+          //   right: (
+          //     <Suspense fallback={<RequestStorePickerLocation />}>
+          //       <StorePicker />
+          //     </Suspense>
+          //   ),
+          // },
+          // {
+          //   left: <Icon icon="zi-clock-1" className="my-auto" />,
+          //   right: (
+          //     <Box flex className="space-x-2">
+          //       <Box className="flex-1 space-y-[2px]">
+          //         <TimePicker />
+          //         <Text size="xSmall" className="text-gray">
+          //           Thời gian nhận hàng
+          //         </Text>
+          //       </Box>
+          //       <Icon icon="zi-chevron-right" />
+          //     </Box>
+          //   ),
+          // },
           {
             left: <Icon icon="zi-user" className="my-auto" />,
             right: (
-              <Suspense fallback={<RequestPersonPickerPhone />}>
+              <Suspense >
                 <PersonPicker />
               </Suspense>
             ),
@@ -47,7 +47,7 @@ export const Delivery: FC = () => {
             right: (
               <Box flex>
                 <ElasticTextarea
-                  placeholder="Nhập ghi chú..."
+                  placeholder="Địa chỉ nhận hàng ..."
                   className="border-none px-0 w-full focus:outline-none"
                   maxRows={4}
                 />
