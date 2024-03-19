@@ -1,14 +1,17 @@
 import { ListItem } from "components/list-item";
 import React, { FC } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { phoneState, requestPhoneTriesState, userState } from "state";
+import { useRecoilValue, useSetRecoilState ,useRecoilState} from "recoil";
+import { phoneState, requestPhoneTriesState, userState,infoState,emailState } from "state";
 
 export const PersonPicker: FC = () => {
   const user = useRecoilValue(userState);
   const phone = useRecoilValue(phoneState);
 
   if (!phone) {
+ 
     return <RequestPersonPickerPhone />;
+  }else{
+   useRecoilValue(infoState)
   }
 
   return <ListItem title={`${user.name} - ${phone}`} subtitle="Người nhận" />;

@@ -8,6 +8,7 @@ import CartPage from "pages/cart";
 import NotificationPage from "pages/notification";
 import ProfilePage from "pages/profile";
 import SearchPage from "pages/search";
+import PersonPage from "pages/person";
 import { getSystemInfo } from "zmp-sdk";
 import { ScrollRestoration } from "./scroll-restoration";
 
@@ -34,6 +35,7 @@ export const Layout: FC = () => {
           <Route path="/notification" element={<NotificationPage />}></Route>
           <Route path="/cart" element={<CartPage />}></Route>
           <Route path="/profile" element={<ProfilePage />}></Route>
+          <Route path="/person" element={<PersonPage />}></Route>
         </Routes>
       </Box>
       <Navigation />

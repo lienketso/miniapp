@@ -5,8 +5,14 @@ import { Box, Icon, Input, Text } from "zmp-ui";
 import { PersonPicker, RequestPersonPickerPhone } from "./person-picker";
 import { RequestStorePickerLocation, StorePicker } from "./store-picker";
 import { TimePicker } from "./time-picker";
+import { userAddressState } from "state";
+import { useRecoilValue, useRecoilState } from "recoil";
 
 export const Delivery: FC = () => {
+  const [addr, setAddr] = useRecoilState(userAddressState);
+  const handleArrdess = (val) => {
+    setAddr(val.target.value);
+  };
   return (
     <Box className="space-y-3 px-4">
       <Text.Header>Thông tin người nhận</Text.Header>
@@ -37,7 +43,7 @@ export const Delivery: FC = () => {
           {
             left: <Icon icon="zi-user" className="my-auto" />,
             right: (
-              <Suspense >
+              <Suspense>
                 <PersonPicker />
               </Suspense>
             ),
@@ -50,6 +56,8 @@ export const Delivery: FC = () => {
                   placeholder="Địa chỉ nhận hàng ..."
                   className="border-none px-0 w-full focus:outline-none"
                   maxRows={4}
+                  value={addr}
+                  onChange={handleArrdess}
                 />
               </Box>
             ),

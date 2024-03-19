@@ -19,6 +19,7 @@ import { Store } from "types/delivery";
 import { calcFinalPrice, getDummyImage } from "utils/product";
 import { getConfig } from "../src/utils/config";
 import { wait } from "utils/async";
+import { Contract } from "types/contact";
 
 export const userState = selector({
   key: "user",
@@ -123,6 +124,10 @@ export const cartState = atom<Cart>({
   default: [],
 });
 
+export const userAddressState = atom({
+  key:"userAdress",
+  default:""
+})
 export const totalQuantityState = selector({
   key: "totalQuantity",
   get: ({ get }) => {
@@ -258,7 +263,11 @@ export const requestLocationTriesState = atom({
 
 export const requestPhoneTriesState = atom({
   key: "requestPhoneTries",
-  default: 0,
+  default: 1,
+});
+export const emailState = atom({
+  key: 'email',
+  default: '',
 });
 
 export const locationState = selector<
@@ -294,7 +303,7 @@ export const locationState = selector<
   },
 });
 
-export const phoneState = selector<string | boolean>({
+export const phoneState = selector<string|boolean>({
   key: "phone",
   get: async ({ get }) => {
 
@@ -344,3 +353,18 @@ async function getPhoneNumberByToken(token:string, accessToken:string) {
     console.error(error);
   }
 }
+
+export const infoState = selector<Contract>({
+  key: "infoState",
+  get: async ({ get }) => {
+    var phone = get(phoneState)
+    
+    await wait(500);
+    const host = getConfig((config) => config.app.host);
+    const response = await fetch(
+      host + "/api/get-customer-info?phone="+'0979823452'
+    );
+    const data = await response.json();
+    return data;
+  }
+})

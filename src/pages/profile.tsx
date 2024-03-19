@@ -1,9 +1,8 @@
 import React, { FC } from "react";
-import { Box, Header, Icon, Page, Text } from "zmp-ui";
+import { Box, Header, Icon, Page, Text, useNavigate } from "zmp-ui";
 import subscriptionDecor from "static/subscription-decor.svg";
 import { ListRenderer } from "components/list-renderer";
 import { useToBeImplemented } from "hooks";
-
 const Subscription: FC = () => {
   const onClick = useToBeImplemented();
   return (
@@ -24,18 +23,21 @@ const Subscription: FC = () => {
 };
 
 const Personal: FC = () => {
-  const onClick = useToBeImplemented();
-
+  const navigate = useNavigate();
   return (
     <Box className="m-4">
       <ListRenderer
         title="Cá nhân"
-        onClick={onClick}
         items={[
           {
             left: <Icon icon="zi-user" />,
             right: (
-              <Box flex>
+              <Box
+                flex
+                onClick={() => {
+                  navigate("/person");
+                }}
+              >
                 <Text.Header className="flex-1 items-center font-normal">
                   Thông tin tài khoản
                 </Text.Header>
