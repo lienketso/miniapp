@@ -1,0 +1,33 @@
+export interface Order {
+    id: number;
+    user_id: number,
+    shipping_option?: string,
+    shipping_method?: string,
+    status:string,
+    amount:string,
+    paid_by_ubgxu:number,
+    cashback_type:string,
+    currency_id?: number,
+    tax_amount:string,
+    shipping_amount:number,
+    description?:string,
+    coupon_code?:string,
+    discount_amount:number,
+    sub_total:number,
+    is_confirmed:number,
+    discount_description?:string,
+    is_finished:number,
+    payment_id:any,
+    created_at:any,
+    updated_at:any,
+    store_id:any,
+    kiotviet_id:any,
+    affliate_user_id:any,
+    commit_no_refund:number
+    process_affiliate:number
+    order_type:string,
+    group_buy_product_id?: any,
+    group_buy_order_id?: any,
+    order_province?: any,
+    order_district?: any,
+  }
