@@ -364,7 +364,7 @@ export const infoState = selector<Contract>({
     await wait(500);
     const host = getConfig((config) => config.app.host);
     const response = await fetch(
-      host + "/api/get-customer-info?phone="+'0979823452'
+      host + "/api/get-customer-info?phone="+ phone
     );
     const data = await response.json();
     return data;
