@@ -14,6 +14,7 @@ import { Product, Variant, HotCategory } from "types/product";
 import { DetailProduct } from "types/detail-product";
 import { Cart } from "types/cart";
 import { Notification } from "types/notification";
+import { Order } from "types/order";
 import { calculateDistance } from "utils/location";
 import { Store } from "types/delivery";
 import { calcFinalPrice, getDummyImage } from "utils/product";
@@ -128,6 +129,7 @@ export const userAddressState = atom({
   key:"userAdress",
   default:""
 })
+
 export const totalQuantityState = selector({
   key: "totalQuantity",
   get: ({ get }) => {
@@ -156,15 +158,12 @@ export const notificationsState = atom<Notification[]>({
       title: "Chào bạn đến với siêu thị EZlife",
       content: "Cảm ơn đã lựa chọn siêu thị EZlife để mua sắm",
     },
-    // {
-    //   id: 2,
-    //   image: logo,
-    //   title: "Giảm 50% lần đầu mua hàng",
-    //   content: "Nhập WELCOME để được giảm 50% giá trị đơn hàng đầu tiên order",
-    // },
   ],
 });
-
+export const orderState = atom<Order[]>({
+  key: "orders",
+  default:[]
+})
 export const keywordState = atom({
   key: "keyword",
   default: "",
@@ -269,7 +268,10 @@ export const emailState = atom({
   key: 'email',
   default: '',
 });
-
+export const ubgxuState = atom({
+  key: 'ubgxu',
+  default: '11110',
+});
 export const locationState = selector<
   { latitude: string; longitude: string } | false
 >({

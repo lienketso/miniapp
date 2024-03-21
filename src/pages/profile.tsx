@@ -1,8 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, Suspense } from "react";
 import { Box, Header, Icon, Page, Text, useNavigate } from "zmp-ui";
 import subscriptionDecor from "static/subscription-decor.svg";
 import { ListRenderer } from "components/list-renderer";
 import { useToBeImplemented } from "hooks";
+import { PersonPicker } from "./cart/person-picker";
 const Subscription: FC = () => {
   const onClick = useToBeImplemented();
   return (
@@ -26,6 +27,12 @@ const Personal: FC = () => {
   const navigate = useNavigate();
   return (
     <Box className="m-4">
+      <Suspense>
+        <div style={{ display: "none" }}>
+          {" "}
+          <PersonPicker />
+        </div>
+      </Suspense>
       <ListRenderer
         title="Cá nhân"
         items={[
@@ -48,7 +55,9 @@ const Personal: FC = () => {
           {
             left: <Icon icon="zi-clock-2" />,
             right: (
-              <Box flex>
+              <Box flex onClick={() => {
+                navigate("/order");
+              }}>
                 <Text.Header className="flex-1 items-center font-normal">
                   Lịch sử đơn hàng
                 </Text.Header>
@@ -109,7 +118,7 @@ const ProfilePage: FC = () => {
       <Header showBackIcon={false} title="&nbsp;" />
       <Subscription />
       <Personal />
-      <Other />
+      {/* <Other /> */}
     </Page>
   );
 };

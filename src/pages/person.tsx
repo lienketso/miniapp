@@ -6,6 +6,7 @@ import {
   userState,
   userAddressState,
   emailState,
+  ubgxuState,
 } from "state";
 import {
   useRecoilValue,
@@ -16,9 +17,11 @@ import {
 import { PersonPicker } from "./cart/person-picker";
 import { updateSuccess } from "hooks";
 import { useSnackbar } from "zmp-ui";
+import axios from 'axios';
+import { getConfig } from "utils/config";
 
 const PersonPage: FC = () => {
-const snackbar = useSnackbar();
+  const snackbar = useSnackbar();
   const user = useRecoilValueLoadable(userState);
   const phone = useRecoilValueLoadable(phoneState);
   const infor = useRecoilValueLoadable(infoState);
@@ -32,31 +35,61 @@ const snackbar = useSnackbar();
   const handleEmail = (val) => {
     setEmail(val.target.value);
   };
+
+  const [xu, setXu] = useRecoilState(ubgxuState);
+
   useEffect(() => {
-    console.log(infor.contents.email);
+    var xu = numberWithCommas(infor.contents.ubgxu);
+    console.log(infor.contents.ubgxu, xu);
+    setXu(xu);
     if (infor.contents.email) {
-      var val = infor.contents.email;
-      setEmail(val);
+      setEmail(infor.contents.email);
     }
   });
+  function numberWithCommas(x) {
+    if (!x) {
+      return 0;
+    }
+    console.log(x);
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
-function updateData(){
+  function updateData() {
+    if(!email){
+        debugger;
+        snackbar.openSnackbar({
+            type: "error",
+            text: "Bạn chưa điền email",
+          });
+          return;
+    }
+    if(!addr){
+        snackbar.openSnackbar({
+            type: "error",
+            text: "Bạn chưa điền địa chỉ",
+          });
+          return;
+    }
 
-    snackbar.openSnackbar({
-        type: "success",
-        text: "Thông tin đã được cập nhật",
+    const host = getConfig((config) => config.app.host);
+    axios.post(host+"/api/post-edit-customer-by-phone'", {
+        name:user.contents.name,
+        phone:phone.contents,
+        email: email,
+        address: addr
+      })
+      .then((response) => {
+        console.log(response);
       });
-}
+    snackbar.openSnackbar({
+      type: "success",
+      text: "Thông tin đã được cập nhật",
+    });
+  }
 
   return (
     <Page>
       <Header title="Thông tin cá nhân" />
-      <Suspense>
-        <div style={{ display: "none" }}>
-          {" "}
-          <PersonPicker />
-        </div>
-      </Suspense>
       <Box className="py-3 px-4">
         <Input
           type="text"
@@ -65,6 +98,14 @@ function updateData(){
           className="px-4"
           value={user.contents.name}
         />
+        <Input
+          type="text"
+          label="Ví điểm"
+          placeholder="Ví điểm"
+          className="px-4"
+          value={xu + " đ"}
+        />
+
         <Suspense>
           <Input
             type="text"
@@ -91,7 +132,7 @@ function updateData(){
           onChange={handleArrdess}
           value={addr}
         />
-        <div className="section-container">
+        <div className="section-container content-center text-center">
           <Button variant="primary" size="large" onClick={updateData}>
             Cập nhật
           </Button>
@@ -100,4 +141,5 @@ function updateData(){
     </Page>
   );
 };
+
 export default PersonPage;
