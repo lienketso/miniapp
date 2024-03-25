@@ -11,6 +11,7 @@ export const PersonPicker: FC = () => {
  
     return <RequestPersonPickerPhone />;
   }else{
+    // lấy thông tin user từ server
    useRecoilValue(infoState)
   }
 

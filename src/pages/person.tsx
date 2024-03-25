@@ -72,7 +72,7 @@ const PersonPage: FC = () => {
     }
 
     const host = getConfig((config) => config.app.host);
-    axios.post(host+"/api/post-edit-customer-by-phone'", {
+    axios.post(host+"/api/post-edit-customer-by-phone", {
         name:user.contents.name,
         phone:phone.contents,
         email: email,
